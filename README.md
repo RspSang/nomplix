@@ -1,7 +1,11 @@
 # Clone Netflix with React
 
-Using:
-Framer motions
-Styled Components
-Recoil
-Typescript
+### Using:
+
+- Styled Components
+- Recoil
+- React Query
+- React Router DOM
+- React Spring
+- Typescript
+- Firebase
