@@ -74,6 +74,7 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
+  z-index: 999;
   width: 40vw;
   height: 80vh;
   left: 0;
@@ -132,9 +133,13 @@ const Bigdate = styled.div`
 const BigVote = styled.div`
   font-size: 1rem;
   margin-left: 1rem;
+  span {
+    color: gray;
+  }
 `;
 
 const GenresList = styled.ul`
+  margin-left: 2rem;
   display: flex;
   justify-content: flex-end;
   span {
@@ -201,14 +206,25 @@ const offset = 6;
 function Slider({ data, category, type, url }: ISlider) {
   const history = useHistory();
   const { scrollY } = useViewportScroll();
-  const bigMovieMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
+  const bigMovieMatch = useRouteMatch<{ movieId: string }>(
+    `/${url}/${type}/:movieId`
+  );
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find(
+      (movie: any) => +movie.id === +bigMovieMatch.params.movieId
+    );
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setBack] = useState(false);
   const onOverlayClick = () => history.push("/");
   const onBoxClicked = (movieId: number) => {
-    history.push(`/movies/${movieId}`);
+    history.push(`/${url}/${type}/${movieId}`);
   };
+  const { data: detail } = useQuery<IDetail>(
+    ["details", `detail_${bigMovieMatch?.params.movieId}`],
+    () => getDetail("movie", bigMovieMatch?.params.movieId)
+  );
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const incraseIndex = () => {
     if (data) {
@@ -230,15 +246,7 @@ function Slider({ data, category, type, url }: ISlider) {
       setIndex((prev) => (prev === maxIndex ? 1 : prev - 1));
     }
   };
-  const clickedMovie =
-    bigMovieMatch?.params.movieId &&
-    data?.results.find(
-      (movie: any) => movie.id === +bigMovieMatch.params.movieId
-    );
-  const { data: detail } = useQuery<IDetail>(
-    ["details", `detail_${bigMovieMatch?.params.movieId}`],
-    () => getDetail("movie", bigMovieMatch?.params.movieId)
-  );
+
   return (
     <>
       {data && (
@@ -289,9 +297,7 @@ function Slider({ data, category, type, url }: ISlider) {
                 <BigMovie
                   style={{ top: scrollY.get() + 100 }}
                   layoutId={bigMovieMatch.params.movieId}
-                  onClick={() =>
-                    console.log(data, +bigMovieMatch.params.movieId)
-                  }
+                  onClick={() => console.log(data)}
                 >
                   {clickedMovie && detail ? (
                     <>
@@ -320,17 +326,17 @@ function Slider({ data, category, type, url }: ISlider) {
                             </Runtime>
                           ) : null}
                           <BigVote>
+                            <span>평점:</span>
                             {clickedMovie.vote_average}
-                            <span>점</span>
                           </BigVote>
+                          <GenresList>
+                            <span>장르: </span>
+                            {detail?.genres.map((genre) => (
+                              <li key={genre.id}>{genre.name},</li>
+                            ))}
+                          </GenresList>
                         </Bigdate>
 
-                        <GenresList>
-                          <span>장르: </span>
-                          {detail?.genres.map((genre) => (
-                            <li key={genre.id}>{genre.name},</li>
-                          ))}
-                        </GenresList>
                         <BigOverview>
                           <BigTagline>{detail?.tagline}</BigTagline>
                           {clickedMovie.overview}

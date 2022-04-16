@@ -49,30 +49,40 @@ const SliderTitle = styled.h2`
 `;
 
 function Home() {
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ["movies", "nowPlaying"],
-    getMovies
-  );
+  const { data: nowPlaying, isLoading: nowPlayingLoading } =
+    useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
   const { data: topMovie, isLoading: topMovieLoading } =
     useQuery<IGetMoviesResult>(["movies", "topMovie"], getTopMovies);
 
   return (
     <Wrapper>
-      {isLoading && topMovieLoading ? (
+      {nowPlayingLoading && topMovieLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+          <Banner
+            bgPhoto={makeImagePath(nowPlaying?.results[0].backdrop_path || "")}
+          >
+            <Title>{nowPlaying?.results[0].title}</Title>
+            <Overview>{nowPlaying?.results[0].overview}</Overview>
           </Banner>
           <SlideContainer>
             <SliderTitle>Now Playing</SliderTitle>
-            <Slider data={data} />
+            <Slider
+              data={nowPlaying}
+              type="nowPlaying"
+              category="movie"
+              url="movie"
+            />
           </SlideContainer>
           <SlideContainer>
             <SliderTitle>Top Rated</SliderTitle>
-            <Slider data={topMovie} />
+            <Slider
+              data={topMovie}
+              type="TopMovie"
+              category="movie"
+              url="movie"
+            />
           </SlideContainer>
         </>
       )}
