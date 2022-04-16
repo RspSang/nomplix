@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
+import { getMovies, getTopMovies, IGetMoviesResult } from "../api";
 import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useState } from "react";
@@ -83,6 +83,18 @@ const BigOverview = styled.p`
   color: ${(props) => props.theme.white.lighter};
 `;
 
+const SlideContainer = styled.div`
+  margin-top: 2rem;
+  height: 270px;
+`;
+
+const SliderTitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 7rem;
+  padding-left: 1rem;
+`;
+
 function Home() {
   const history = useHistory();
   const bigMovieMatch = useRouteMatch<{ movieId: string }>("/movies/:movieId");
@@ -91,13 +103,16 @@ function Home() {
     ["movies", "nowPlaying"],
     getMovies
   );
+  const { data: topMovie, isLoading: topMovieLoading } =
+    useQuery<IGetMoviesResult>(["movies", "topMovie"], getTopMovies);
   const onOverlayClick = () => history.push("/");
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId);
+  console.log(topMovie);
   return (
     <Wrapper>
-      {isLoading ? (
+      {isLoading && topMovieLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
@@ -105,7 +120,14 @@ function Home() {
             <Title>{data?.results[0].title}</Title>
             <Overview>{data?.results[0].overview}</Overview>
           </Banner>
-          <Slider {...data} />
+          <SlideContainer>
+            <SliderTitle>Now Playing</SliderTitle>
+            <Slider data={data} />
+          </SlideContainer>
+          <SlideContainer>
+            <SliderTitle>Top Rated</SliderTitle>
+            <Slider data={topMovie} />
+          </SlideContainer>
           <AnimatePresence>
             {bigMovieMatch ? (
               <>

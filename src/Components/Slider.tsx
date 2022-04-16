@@ -104,9 +104,16 @@ const infoVariants = {
   },
 };
 
+export interface ISlider {
+  data: any;
+  category?: string;
+  url?: string;
+  type?: string;
+}
+
 const offset = 6;
 
-function Slider(data: any) {
+function Slider({ data, category, type, url }: ISlider) {
   const history = useHistory();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
