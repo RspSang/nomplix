@@ -217,7 +217,9 @@ function Slider({ data, category, type, url }: ISlider) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [back, setBack] = useState(false);
-  const onOverlayClick = () => history.push("/");
+  const onOverlayClick = () => {
+    category === "tv" ? history.push("/tv") : history.push("/");
+  };
   const onBoxClicked = (movieId: number) => {
     history.push(`/${url}/${type}/${movieId}`);
   };
@@ -282,7 +284,7 @@ function Slider({ data, category, type, url }: ISlider) {
                     bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                   >
                     <Info variants={infoVariants}>
-                      <h4>{movie.title}</h4>
+                      <h4>{category === "tv" ? movie.name : movie.title}</h4>
                     </Info>
                   </Box>
                 ))}
@@ -330,12 +332,11 @@ function Slider({ data, category, type, url }: ISlider) {
                           </BigVote>
                           <GenresList>
                             <span>장르: </span>
-                            {detail?.genres.map((genre) => (
+                            {detail?.genres?.map((genre) => (
                               <li key={genre.id}>{genre.name},</li>
                             ))}
                           </GenresList>
                         </Bigdate>
-
                         <BigOverview>
                           <BigTagline>{detail?.tagline}</BigTagline>
                           {clickedMovie.overview}

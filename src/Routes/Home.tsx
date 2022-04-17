@@ -9,12 +9,12 @@ import {
 import { makeImagePath } from "../utils";
 import Slider from "../Components/Slider";
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   background: black;
   padding-bottom: 200px;
 `;
 
-const Loader = styled.div`
+export const Loader = styled.div`
   height: 20vh;
   display: flex;
   justify-content: center;
@@ -22,7 +22,7 @@ const Loader = styled.div`
   color: black;
 `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
+export const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -33,21 +33,21 @@ const Banner = styled.div<{ bgPhoto: string }>`
   background-size: cover;
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px; ;
 `;
 
-const Overview = styled.p`
+export const Overview = styled.p`
   font-size: 30px;
   width: 50%;
 `;
 
-const SlideContainer = styled.div`
+export const SlideContainer = styled.div`
   height: 270px;
 `;
 
-const SliderTitle = styled.h2`
+export const SliderTitle = styled.h2`
   font-size: 2rem;
   font-weight: 600;
   padding-left: 1rem;
@@ -61,7 +61,7 @@ function Home() {
     useQuery<IGetMoviesResult>(["movies", "topMovie"], getTopMovies);
   const { data: upcomingMovie, isLoading: upcomingMovieLoading } =
     useQuery<IGetMoviesResult>(["movies", "upcomingMovie"], getUpcomingMovies);
-
+  console.log(nowPlaying);
   return (
     <Wrapper>
       {nowPlayingLoading && topMovieLoading && upcomingMovieLoading ? (
