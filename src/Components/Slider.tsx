@@ -297,7 +297,6 @@ function Slider({ data, category, type, url }: ISlider) {
                 <BigMovie
                   style={{ top: scrollY.get() + 100 }}
                   layoutId={bigMovieMatch.params.movieId}
-                  onClick={() => console.log(data)}
                 >
                   {clickedMovie && detail ? (
                     <>

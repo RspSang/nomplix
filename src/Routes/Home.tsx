@@ -1,6 +1,11 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMovies, getTopMovies, IGetMoviesResult } from "../api";
+import {
+  getMovies,
+  getTopMovies,
+  getUpcomingMovies,
+  IGetMoviesResult,
+} from "../api";
 import { makeImagePath } from "../utils";
 import Slider from "../Components/Slider";
 
@@ -14,6 +19,7 @@ const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
@@ -53,10 +59,12 @@ function Home() {
     useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
   const { data: topMovie, isLoading: topMovieLoading } =
     useQuery<IGetMoviesResult>(["movies", "topMovie"], getTopMovies);
+  const { data: upcomingMovie, isLoading: upcomingMovieLoading } =
+    useQuery<IGetMoviesResult>(["movies", "upcomingMovie"], getUpcomingMovies);
 
   return (
     <Wrapper>
-      {nowPlayingLoading && topMovieLoading ? (
+      {nowPlayingLoading && topMovieLoading && upcomingMovieLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
@@ -76,10 +84,19 @@ function Home() {
             />
           </SlideContainer>
           <SlideContainer>
+            <SliderTitle>Upcoming Movie</SliderTitle>
+            <Slider
+              data={upcomingMovie}
+              type="upcomingMovie"
+              category="movie"
+              url="movie"
+            />
+          </SlideContainer>
+          <SlideContainer>
             <SliderTitle>Top Rated</SliderTitle>
             <Slider
               data={topMovie}
-              type="TopMovie"
+              type="topMovie"
               category="movie"
               url="movie"
             />

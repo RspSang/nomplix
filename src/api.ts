@@ -57,6 +57,12 @@ export function getTopMovies() {
   );
 }
 
+export function getUpcomingMovies() {
+  return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(
+    (response) => response.json()
+  );
+}
+
 export function getDetail(category?: string, movieId?: string) {
   return fetch(`${BASE_PATH}/${category}/${movieId}?api_key=${API_KEY}`).then(
     (response) => response.json()
