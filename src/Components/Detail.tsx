@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
 import styled from "styled-components";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { useQuery } from "react-query";
-import { getDetail, IDetail } from "../api";
+import { getDetail, IDetail, IMovie } from "../api";
 import { makeImagePath } from "../utils";
 
 const Overlay = styled(motion.div)`
@@ -103,14 +103,10 @@ function Detail({ data, category, type, url }: ISlider) {
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find(
-      (movie: any) => +movie.id === +bigMovieMatch.params.movieId
+      (movie: IMovie) => +movie.id === +bigMovieMatch.params.movieId
     );
   const onOverlayClick = () => {
-    category === "movie"
-      ? history.push("/")
-      : category === "tv"
-      ? history.push("/tv")
-      : history.push("/search");
+    history.goBack();
   };
   const { data: detail } = useQuery<IDetail>(
     ["details", `detail_${bigMovieMatch?.params.movieId}`],
