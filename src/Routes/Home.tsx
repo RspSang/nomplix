@@ -61,7 +61,6 @@ function Home() {
     useQuery<IGetMoviesResult>(["movies", "topMovie"], getTopMovies);
   const { data: upcomingMovie, isLoading: upcomingMovieLoading } =
     useQuery<IGetMoviesResult>(["movies", "upcomingMovie"], getUpcomingMovies);
-  console.log(nowPlaying);
   return (
     <Wrapper>
       {nowPlayingLoading && topMovieLoading && upcomingMovieLoading ? (

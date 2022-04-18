@@ -40,11 +40,11 @@ function Tv() {
             <Overview>{topShow?.results[0].overview}</Overview>
           </Banner>
           <SlideContainer>
-            <SliderTitle>Now Playing</SliderTitle>
+            <SliderTitle>Top Show</SliderTitle>
             <Slider data={topShow} type="topShow" category="tv" url="tv" />
           </SlideContainer>
           <SlideContainer>
-            <SliderTitle>Upcoming Movie</SliderTitle>
+            <SliderTitle>Popular Show</SliderTitle>
             <Slider
               data={popularShow}
               type="popularShow"
