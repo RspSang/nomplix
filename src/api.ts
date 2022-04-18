@@ -1,7 +1,7 @@
 const API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
 const BASE_PATH = "https://api.themoviedb.org/3";
 
-interface IMovie {
+export interface IMovie {
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -106,4 +106,16 @@ export function getOnAirShows() {
   return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}`).then(
     (response) => response.json()
   );
+}
+
+export function getSearchMovie(query: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${query}}&page=1&include_adult=false`
+  ).then((response) => response.json());
+}
+
+export function getSearchShows(query: string | null) {
+  return fetch(
+    `${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${query}}&page=1&include_adult=false`
+  ).then((response) => response.json());
 }
